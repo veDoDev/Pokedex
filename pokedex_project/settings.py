@@ -5,7 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '6jht+jh8vh$z$_j67l03(qarr7b8g_ez17a$ze5sye-e^0ls=)')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
