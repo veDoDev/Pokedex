@@ -10,7 +10,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '6jht+jh8vh$z$_j67l03(qarr7b8g_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['pokedex-d3em.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['pokedex-d3em.onrender.com']
+
 
 # Application definition
 INSTALLED_APPS = [
