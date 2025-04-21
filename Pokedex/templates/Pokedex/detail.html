@@ -1,0 +1,221 @@
+{% extends 'Pokedex/base.html' %}
+
+{% block title %}{{ pokemon.name }} | Pokédex{% endblock %}
+
+{% block content %}
+<div class="pokemon-navigation">
+    {% if prev_pokemon %}
+    <a href="{% url 'pokedex:pokemon_detail' prev_pokemon.id %}" class="nav-prev">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        #{{ prev_pokemon.id|stringformat:"04d" }} {{ prev_pokemon.name }}
+    </a>
+    {% else %}
+    <div class="nav-placeholder"></div>
+    {% endif %}
+    
+    {% if next_pokemon %}
+    <a href="{% url 'pokedex:pokemon_detail' next_pokemon.id %}" class="nav-next">
+        {{ next_pokemon.name }} #{{ next_pokemon.id|stringformat:"04d" }}
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </a>
+    {% else %}
+    <div class="nav-placeholder"></div>
+    {% endif %}
+</div>
+
+<div class="pokemon-detail-header">
+    <div class="container">
+        <h1 class="pokemon-title">{{ pokemon.name }} <span class="pokemon-number">#{{ pokemon.id|stringformat:"04d" }}</span></h1>
+    </div>
+</div>
+
+<div class="pokemon-detail-content">
+    <div class="container">
+        <div class="detail-grid">
+            <div class="pokemon-image-container">
+                <img src="{{ pokemon.image_url }}" alt="{{ pokemon.name }}" class="pokemon-detail-image">
+            </div>
+            
+            <div class="pokemon-info">
+                <div class="pokemon-description">
+                    {% if pokemon.id == 1 %}
+                        <p>For some time after its birth, it uses the nutrients that are packed into the seed on its back in order to grow.</p>
+                    {% elif pokemon.id == 4 %}
+                        <p>The flame on its tail shows the strength of its life-force. If it is weak, the flame also burns weakly.</p>
+                    {% elif pokemon.id == 7 %}
+                        <p>When it retracts its long neck into its shell, it squirts out water with vigorous force.</p>
+                    {% else %}
+                        <p>A detailed description of {{ pokemon.name }} would appear here in a complete Pokédex.</p>
+                    {% endif %}
+                </div>
+                
+                <div class="pokemon-versions">
+                    <h3>Versions:</h3>
+                    <div class="version-icons">
+                        <span class="version-icon blue"></span>
+                        <span class="version-icon red"></span>
+                    </div>
+                </div>
+                
+                <div class="pokemon-attributes">
+                    <div class="attribute-row">
+                        <div class="attribute">
+                            <h4>Height</h4>
+                            {% if pokemon.id == 1 %}
+                                <p>2' 04"</p>
+                            {% elif pokemon.id == 4 %}
+                                <p>2' 00"</p>
+                            {% elif pokemon.id == 7 %}
+                                <p>1' 08"</p>
+                            {% else %}
+                                <p>{{ pokemon.height|floatformat:1 }} dm</p>
+                            {% endif %}
+                        </div>
+                        <div class="attribute">
+                            <h4>Category</h4>
+                            <p>
+                                {% if pokemon.id == 1 or pokemon.id == 2 or pokemon.id == 3 %}
+                                    Seed
+                                {% elif pokemon.id == 4 %}
+                                    Lizard
+                                {% elif pokemon.id == 7 %}
+                                    Tiny Turtle
+                                {% else %}
+                                    Unknown
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="attribute-row">
+                        <div class="attribute">
+                            <h4>Weight</h4>
+                            {% if pokemon.id == 1 %}
+                                <p>15.2 lbs</p>
+                            {% elif pokemon.id == 4 %}
+                                <p>18.7 lbs</p>
+                            {% elif pokemon.id == 7 %}
+                                <p>19.8 lbs</p>
+                            {% else %}
+                                <p>{{ pokemon.weight|floatformat:1 }} hg</p>
+                            {% endif %}
+                        </div>
+                        <div class="attribute">
+                            <h4>Abilities</h4>
+                            <p>
+                                {% if pokemon.id == 1 or pokemon.id == 2 or pokemon.id == 3 %}
+                                    Overgrow
+                                {% elif pokemon.id == 4 %}
+                                    Blaze
+                                {% elif pokemon.id == 7 %}
+                                    Torrent
+                                {% else %}
+                                    Unknown
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="attribute-row">
+                        <div class="attribute">
+                            <h4>Gender</h4>
+                            <p>
+                                <span class="gender-icon male">♂</span>
+                                <span class="gender-icon female">♀</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pokemon-type-section">
+                    <h3>Type</h3>
+                    <div class="pokemon-types">
+                        {% if pokemon.id == 1 or pokemon.id == 2 or pokemon.id == 3 %}
+                            <span class="type grass">Grass</span>
+                            <span class="type poison">Poison</span>
+                        {% elif pokemon.id == 4 %}
+                            <span class="type fire">Fire</span>
+                        {% elif pokemon.id == 7 %}
+                            <span class="type water">Water</span>
+                        {% else %}
+                            <span class="type normal">Normal</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="pokemon-weakness-section">
+                    <h3>Weaknesses</h3>
+                    <div class="pokemon-weaknesses">
+                        {% if pokemon.id == 1 or pokemon.id == 2 or pokemon.id == 3 %}
+                            <span class="weakness fire">Fire</span>
+                            <span class="weakness ice">Ice</span>
+                            <span class="weakness flying">Flying</span>
+                            <span class="weakness psychic">Psychic</span>
+                        {% elif pokemon.id == 4 %}
+                            <span class="weakness water">Water</span>
+                            <span class="weakness ground">Ground</span>
+                            <span class="weakness rock">Rock</span>
+                        {% elif pokemon.id == 7 %}
+                            <span class="weakness electric">Electric</span>
+                            <span class="weakness grass">Grass</span>
+                        {% else %}
+                            <span class="weakness fighting">Fighting</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pokemon-stats-section">
+            <h3>Stats</h3>
+            <div class="stats-grid">
+                <div class="stat-bar">
+                    <span class="stat-label">HP</span>
+                    <div class="bar-container">
+                        <div class="bar hp" style="width: {% widthratio pokemon.hp 255 100 %}%"></div>
+                    </div>
+                    <span class="stat-value">{{ pokemon.hp }}</span>
+                </div>
+        
+                <div class="stat-bar">
+                    <span class="stat-label">Attack</span>
+                    <div class="bar-container">
+                        <div class="bar attack" style="width: {% widthratio pokemon.attack 255 100 %}%"></div>
+                    </div>
+                    <span class="stat-value">{{ pokemon.attack }}</span>
+                </div>
+        
+                <div class="stat-bar">
+                    <span class="stat-label">Defense</span>
+                    <div class="bar-container">
+                        <div class="bar defense" style="width: {% widthratio pokemon.defense 255 100 %}%"></div>
+                    </div>
+                    <span class="stat-value">{{ pokemon.defense }}</span>
+                </div>
+        
+                <div class="stat-bar">
+                    <span class="stat-label">Special Attack</span>
+                    <div class="bar-container">
+                        <div class="bar special-attack" style="width: {% widthratio pokemon.attack 255 100 %}%"></div>
+                    </div>
+                    <span class="stat-value">{{ pokemon.attack }}</span>
+                </div>
+        
+                <div class="stat-bar">
+                    <span class="stat-label">Special Defense</span>
+                    <div class="bar-container">
+                        <div class="bar special-defense" style="width: {% widthratio pokemon.defense 255 100 %}%"></div>
+                    </div>
+                    <span class="stat-value">{{ pokemon.defense }}</span>
+                </div>
+        
+                <div class="stat-bar">
+                    <span class="stat-label">Speed</span>
+                    <div class="bar-container">
+                        <div class="bar speed" style="width: {% widthratio pokemon.speed 255 100 %}%"></div>
+                    </div>
+                    <span class="stat-value">{{ pokemon.speed }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
