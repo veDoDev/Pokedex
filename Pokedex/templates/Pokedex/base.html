@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pokédex{% endblock %}</title>
+    
+    <!-- Debugging: Print static URL -->
+    <meta name="static-url" content="{% get_static_prefix %}">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Static CSS - EXACT PATH MATTERS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- Temporary Debugging Style -->
+    <!-- <style>
+        body {
+            background-color: blue !important;
+        }
+    </style> -->
+</head>
+<body>
+    <div class="main-container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Static JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

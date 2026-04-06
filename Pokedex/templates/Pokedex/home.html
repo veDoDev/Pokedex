@@ -1,0 +1,124 @@
+{% extends 'pokedex/base.html' %}
+
+{% block title %}Pokédex - Home{% endblock %}
+
+{% block content %}
+<div class="search-section">
+    <div class="container">
+        <h2 class="search-title">Name or Number</h2>
+        
+        <form method="GET" action="{% url 'pokedex:home' %}" class="search-form">
+            <input type="text" name="search" placeholder="Enter a Pokémon name or number" value="{{ search_query }}">
+            <button type="submit" class="search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+        </form>
+        
+        <p class="search-hint">Use the Advanced Search to explore Pokémon by type, weakness, Ability, and more!</p>
+    </div>
+    
+    <div class="search-info">
+        <div class="container">
+            <p>Search for a Pokémon by name or using its National Pokédex number.</p>
+        </div>
+    </div>
+</div>
+
+<div class="advanced-search-toggle">
+    <div class="container">
+        <button id="toggle-advanced-search" class="toggle-button">
+            Show Advanced Search
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+    </div>
+</div>
+
+<div class="advanced-search-section" id="advanced-search" style="display: none;">
+    <!-- Advanced search form would go here -->
+    <div class="container">
+        <p>Advanced search options will be implemented in a future update.</p>
+    </div>
+</div>
+
+<div class="pokemon-controls">
+    <div class="container">
+        <div class="controls-wrapper">
+            <button class="surprise-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"></path><path d="M9 8V2"></path><path d="M15 8V2"></path><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path></svg>
+                Surprise Me!
+            </button>
+            
+            <div class="sort-controls">
+                <span>Sort By</span>
+                <div class="sort-dropdown">
+                    <button class="sort-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+                        Lowest Number (First)
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="sort-options" style="display: none;">
+                        <a href="?sort=id" class="{% if sort_by == 'id' %}active{% endif %}">Lowest Number (First)</a>
+                        <a href="?sort=-id" class="{% if sort_by == '-id' %}active{% endif %}">Highest Number (First)</a>
+                        <a href="?sort=name" class="{% if sort_by == 'name' %}active{% endif %}">A-Z</a>
+                        <a href="?sort=-name" class="{% if sort_by == '-name' %}active{% endif %}">Z-A</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pokemon-list">
+    <div class="container">
+        {% if page_obj %}
+            <div class="pokemon-grid">
+                {% for pokemon in page_obj %}
+                    <a href="{% url 'pokedex:pokemon_detail' pokemon.id %}" class="pokemon-card">
+                        <div class="pokemon-number">#{{ pokemon.id|stringformat:"04d" }}</div>
+                        <div class="pokemon-image">
+                            <img src="{{ pokemon.image_url }}" alt="{{ pokemon.name }}">
+                        </div>
+                        <h2 class="pokemon-name">{{ pokemon.name }}</h2>
+                        <div class="pokemon-types">
+                            <!-- In a real app, you would dynamically generate these based on the Pokémon's types -->
+                            {% if pokemon.id == 1 or pokemon.id == 2 or pokemon.id == 3 %}
+                                <span class="type grass">Grass</span>
+                                <span class="type poison">Poison</span>
+                            {% elif pokemon.id == 4 %}
+                                <span class="type fire">Fire</span>
+                            {% elif pokemon.id == 7 %}
+                                <span class="type water">Water</span>
+                            {% else %}
+                                <span class="type normal">Normal</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="page-link">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="page-link">previous</a>
+                    {% endif %}
+
+                    <span class="current-page">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="page-link">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}" class="page-link">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% else %}
+            <div class="no-results">
+                <p>No Pokémon found matching "{{ search_query }}"</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
